@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 
 const SingleBooks = () => {
@@ -79,6 +80,12 @@ const SingleBooks = () => {
                   >
                     Delete Book
                   </button>
+                  <Link
+                    to={`/edit-book/${id}`}
+                    className="px-4 py-2 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-300 shadow-sm hover:shadow-md active:bg-red-700 dark:active:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm"
+                  >
+                    Edit Book
+                  </Link>
                 </div>
 
                 {/* Book Metadata */}

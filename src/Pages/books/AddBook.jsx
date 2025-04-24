@@ -52,7 +52,7 @@ const AddBook = () => {
           isbnNumber: "",
         });
         setImage(null);
-        navigate("/"); // Redirect on success
+        navigate("/add-books"); // Redirect on success
       }
     } catch (error) {
       alert(error.response?.data?.message || "Upload failed");
