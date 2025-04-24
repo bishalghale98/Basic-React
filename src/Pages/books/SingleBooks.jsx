@@ -1,13 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SingleBooks = () => {
+  const navigate = useNavigate();
+
   const { id } = useParams();
 
   const [book, setBook] = useState({});
 
-  const fetchBook = async (params) => {
+  const fetchBook = async () => {
     const response = await axios.get(`http://127.0.0.1:3000/book/${id}`);
     if (response?.data) {
       setBook(response.data.data);
@@ -28,12 +30,21 @@ const SingleBooks = () => {
     publishedAt,
   } = book;
 
-  console.log(book);
+  //delete
+  const deleteBook = async () => {
+    const response = await axios.delete(`http://127.0.0.1:3000/book/${id}`);
+    if (response.status === 200) {
+      alert("Book Delete Successfully");
+      navigate(-1);
+    } else {
+      alert("Error");
+    }
+  };
 
   return (
     <>
       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 ">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Book Cover Image */}
@@ -47,19 +58,27 @@ const SingleBooks = () => {
 
               {/* Book Details */}
               <div className="md:col-span-2 p-8">
-                <div className="mb-6">
-                  <span className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-semibold px-3 py-1 rounded-full mb-3">
-                    {publication}
-                  </span>
-                  <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                    {bookName}
-                  </h1>
-                  <h2 className="text-xl text-gray-600 dark:text-gray-300 mb-4">
-                    by{" "}
-                    <span className="text-blue-600 dark:text-blue-400">
-                      {authorName}
+                <div className="flex justify-between items-start">
+                  <div className="mb-6">
+                    <span className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-semibold px-3 py-1 rounded-full mb-3">
+                      {publication}
                     </span>
-                  </h2>
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                      {bookName}
+                    </h1>
+                    <h2 className="text-xl text-gray-600 dark:text-gray-300 mb-4">
+                      by{" "}
+                      <span className="text-blue-600 dark:text-blue-400">
+                        {authorName}
+                      </span>
+                    </h2>
+                  </div>
+                  <button
+                    onClick={deleteBook}
+                    className="px-4 py-2 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-300 shadow-sm hover:shadow-md active:bg-red-700 dark:active:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm"
+                  >
+                    Delete Book
+                  </button>
                 </div>
 
                 {/* Book Metadata */}
@@ -88,12 +107,6 @@ const SingleBooks = () => {
                       {publication}
                     </p>
                   </div>
-                  {/* <div>
-                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                      Format
-                    </h3>
-                    <p className="text-gray-900 dark:text-white">Hardcover</p>
-                  </div> */}
                 </div>
 
                 {/* Price and Action Buttons */}
@@ -103,12 +116,6 @@ const SingleBooks = () => {
                       <span className="text-3xl font-bold text-gray-900 dark:text-white">
                         Rs. {bookPrice}
                       </span>
-                      {/* <span className="ml-2 text-sm text-gray-500 dark:text-gray-400 line-through">
-                        $18.99
-                      </span>
-                      <span className="ml-2 text-sm font-medium text-green-600 dark:text-green-400">
-                        21% off
-                      </span> */}
                     </div>
                     <div className="flex space-x-4">
                       <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
