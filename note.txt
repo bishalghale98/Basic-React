@@ -1,0 +1,82 @@
+
+For post data 
+
+# // const [authorName, setAuthorName] = useState("");
+# // const [bookName, setBookName] = useState("");
+# // const [publication, setPublication] = useState("");
+# // const [publishedAt, setPublishedAt] = useState("");
+# // const [bookPrice, setBookPrice] = useState("");
+# // const [isbnNumber, setIsbnNumber] = useState("");
+# // const [image, setImage] = useState(null);
+
+# // const handleSubmit = async (e) => {
+# //   e.preventDefault();
+# //   const formData = new FormData();
+# //   formData.append("authorName", authorName);
+# //   formData.append("bookName", bookName);
+# //   formData.append("publication", publication);
+# //   formData.append("publishedAt", publishedAt);
+# //   formData.append("bookPrice", bookPrice);
+# //   formData.append("isbnNumber", isbnNumber);
+# //   formData.append("image", image);
+
+# //   const response = await axios.post("http://127.0.0.1:3000/book", formData);
+# // };
+
+next way
+
+# const navigate = useNavigate();
+
+#   const [data, setData] = useState({
+#     authorName: "",
+#     bookName: "",
+#     publication: "",
+#     publishedAt: "",
+#     bookPrice: "",
+#     isbnNumber: "",
+#   });
+
+#   const [image, setImage] = useState(null);
+
+#   const handleChange = (e) => {
+#     const { name, value } = e.target;
+#     setData({
+#       ...data,
+#       [name]: value,
+#     });
+#   };
+
+#   const handleSubmit = async (e) => {
+#     e.preventDefault();
+
+#     if (!image) {
+#       alert("Please upload an image");
+#       return;
+#     }
+
+#     const formData = new FormData();
+#     Object.entries(data).forEach(([key, value]) => {
+#       formData.append(key, value);
+#     });
+#     formData.append("image", image);
+
+#     try {
+#       const response = await axios.post("http://127.0.0.1:3000/book", formData);
+
+#       if (response.status === 200) {
+#         // Reset form
+#         setData({
+#           authorName: "",
+#           bookName: "",
+#           publication: "",
+#           publishedAt: "",
+#           bookPrice: "",
+#           isbnNumber: "",
+#         });
+#         setImage(null);
+#         navigate("/"); // Redirect on success
+#       }
+#     } catch (error) {
+#       alert(error.response?.data?.message || "Upload failed");
+#     }
+#   };

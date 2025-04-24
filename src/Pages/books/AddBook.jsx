@@ -1,30 +1,70 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AddBook = () => {
-  // const newBook = async (params) => {
-  //   const {
-  //     authorName,
-  //     bookName,
-  //     bookPrice,
-  //     imagePath,
-  //     isbnNumber,
-  //     publication,
-  //     publishedAt,
-  //   } = axios.post("http://127.0.0.1:3000/book");
-  //   console.log(response);
-  // };
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   newBook();
-  // }, []);
+  const [data, setData] = useState({
+    authorName: "",
+    bookName: "",
+    publication: "",
+    publishedAt: "",
+    bookPrice: "",
+    isbnNumber: "",
+  });
+
+  const [image, setImage] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!image) {
+      alert("Please upload an image");
+      return;
+    }
+
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    formData.append("image", image);
+
+    try {
+      const response = await axios.post("http://127.0.0.1:3000/book", formData);
+
+      if (response.status === 200) {
+        // Reset form
+        setData({
+          authorName: "",
+          bookName: "",
+          publication: "",
+          publishedAt: "",
+          bookPrice: "",
+          isbnNumber: "",
+        });
+        setImage(null);
+        navigate("/"); // Redirect on success
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || "Upload failed");
+    }
+  };
 
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6 py-8">
           <form
-            action="submit"
+            onSubmit={handleSubmit}
             method="post"
             className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6"
           >
@@ -48,6 +88,7 @@ const AddBook = () => {
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-800 dark:text-white"
                   placeholder="Enter author name"
+                  onChange={handleChange}
                 />
               </div>
 
@@ -66,6 +107,7 @@ const AddBook = () => {
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-800 dark:text-white"
                   placeholder="Enter book name"
+                  onChange={handleChange}
                 />
               </div>
 
@@ -90,6 +132,7 @@ const AddBook = () => {
                     required
                     className="w-full pl-8 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-800 dark:text-white"
                     placeholder="0.00"
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -109,6 +152,7 @@ const AddBook = () => {
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-800 dark:text-white"
                   placeholder="Enter ISBN number"
+                  onChange={handleChange}
                 />
               </div>
 
@@ -127,6 +171,7 @@ const AddBook = () => {
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-800 dark:text-white"
                   placeholder="Enter publication name"
+                  onChange={handleChange}
                 />
               </div>
 
@@ -144,46 +189,70 @@ const AddBook = () => {
                   name="publishedAt"
                   required
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 dark:bg-gray-800 dark:text-white"
+                  onChange={handleChange}
                 />
               </div>
 
               {/* Image Path */}
               <div className="space-y-2 md:col-span-2">
                 <label
-                  htmlFor="imagePath"
+                  htmlFor="image"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Book Cover Image
                 </label>
                 <div className="flex items-center justify-center w-full">
-                  <label className="flex flex-col w-full h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600 rounded-md cursor-pointer">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <svg
-                        className="w-10 h-10 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                        ></path>
-                      </svg>
-                      <p className="py-1 text-sm text-gray-600 dark:text-gray-400">
-                        Upload an image
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        PNG, JPG, JPEG up to 2MB
-                      </p>
-                    </div>
+                  <label className="flex flex-col w-full border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600 rounded-md cursor-pointer">
+                    {image ? (
+                      <div className="p-4 flex flex-col items-center">
+                        <div className="relative w-full max-w-xs h-48 bg-gray-100 dark:bg-gray-800 rounded-md overflow-hidden">
+                          <img
+                            src={URL.createObjectURL(image)}
+                            alt="Preview"
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                        <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                          {image.name}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setImage(null)}
+                          className="mt-2 text-sm text-red-500 hover:text-red-700 dark:hover:text-red-400"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg
+                          className="w-10 h-10 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          ></path>
+                        </svg>
+                        <p className="py-1 text-sm text-gray-600 dark:text-gray-400">
+                          Click to upload an image
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          PNG, JPG, GIF up to 10MB
+                        </p>
+                      </div>
+                    )}
                     <input
                       type="file"
-                      id="imagePath"
-                      name="imagePath"
+                      id="image"
+                      name="image"
                       accept="image/*"
+                      onChange={(e) => setImage(e.target.files[0])}
                       className="hidden"
                     />
                   </label>

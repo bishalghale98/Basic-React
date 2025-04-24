@@ -35,7 +35,7 @@ const Card = ({ book }) => {
         </div>
 
         {/* Book Cover */}
-        <Link to="#" className="block group">
+        <Link to={`./${book._id}`} className="block group">
           <img
             className="w-full h-64 object-contain p-6 transition-transform duration-300 group-hover:scale-105"
             src={
@@ -50,7 +50,7 @@ const Card = ({ book }) => {
         {/* Book Details */}
         <div className="px-6 pb-6">
           <div className="mb-4">
-            <Link to="#">
+            <Link to={`./${book._id}`}>
               <h5 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                 {bookName}
               </h5>
