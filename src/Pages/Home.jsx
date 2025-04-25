@@ -8,7 +8,9 @@ const Home = () => {
   const [threeBooks, setThreeBooks] = useState([]);
 
   const fetchThreeBooks = async () => {
-    const result = await axios.get("http://127.0.0.1:3000/book");
+    const result = await axios.get(
+      "https://learning-mern2-0.onrender.com/book"
+    );
     const limitedBooks = result.data.data.slice(0, 3);
     if (result?.data) {
       setThreeBooks(limitedBooks);

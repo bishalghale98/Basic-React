@@ -24,7 +24,9 @@ const EditBook = () => {
   const fetchBook = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://127.0.0.1:3000/book/${id}`);
+      const response = await axios.get(
+        `https://learning-mern2-0.onrender.com/book/${id}`
+      );
 
       if (!response?.data?.data) {
         throw new Error("Book not found");
@@ -83,7 +85,7 @@ const EditBook = () => {
       });
 
       const response = await axios.patch(
-        `http://127.0.0.1:3000/book/${id}`,
+        `https://learning-mern2-0.onrender.com/book/${id}`,
         formData,
         {
           headers: {

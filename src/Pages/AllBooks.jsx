@@ -9,7 +9,7 @@ const AllBooks = () => {
   const [books, setBooks] = useState([]);
 
   const fetchBooks = async () => {
-    const response = await axios.get("http://127.0.0.1:3000/book");
+    const response = await axios.get("https://learning-mern2-0.onrender.com/book");
     if (response?.data) {
       setBooks(response.data.data);
     }

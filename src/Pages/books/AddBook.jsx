@@ -39,7 +39,10 @@ const AddBook = () => {
     formData.append("image", image);
 
     try {
-      const response = await axios.post("http://127.0.0.1:3000/book", formData);
+      const response = await axios.post(
+        "https://learning-mern2-0.onrender.com/book",
+        formData
+      );
 
       if (response.status === 200) {
         // Reset form
