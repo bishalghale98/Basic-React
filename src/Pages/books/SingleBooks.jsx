@@ -13,7 +13,7 @@ const SingleBooks = () => {
 
   const fetchBook = async () => {
     const response = await axios.get(
-      `https://learning-mern2-0.onrender.com/${id}`
+      `https://learning-mern2-0.onrender.com/book/${id}`
     );
     if (response?.data) {
       setBook(response.data.data);
@@ -36,7 +36,9 @@ const SingleBooks = () => {
 
   //delete
   const deleteBook = async () => {
-    const response = await axios.delete(`http://127.0.0.1:3000/book/${id}`);
+    const response = await axios.delete(
+      `https://learning-mern2-0.onrender.com/book/${id}`
+    );
     if (response.status === 200) {
       alert("Book Delete Successfully");
       navigate(-1);
